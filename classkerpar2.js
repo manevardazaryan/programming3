@@ -133,7 +133,6 @@ class Kerpar2 extends Base{
 
 
     disappear() {
-
         var emptyCells = this.chooseCell(4);
         var newCell = random(emptyCells)
         if (newCell && this.energy>=55) {
@@ -182,11 +181,17 @@ class Kerpar2 extends Base{
         }
     }
     mul() {
-        
+
+       if (jermastican >35 & jermastican < 50) {
+          var  multiply = 35
+      }
+       else if (jermastican >20 & jermastican < 35) {
+          multiply = 30
+       }
         this.multiply++
         var emptyCells = this.chooseCell(0);
         var newCell = random(emptyCells)
-        if (newCell && this.multiply >= 150) {
+        if (newCell && this.multiply >= multiply) {
             var newX = newCell[0];
             var newY = newCell[1];
             matrix[newY][newX] = this.index;
@@ -198,9 +203,19 @@ class Kerpar2 extends Base{
         }
     }
     eat(){
+    if (jermastican > -30 & jermastican < 0) {
+
+         var energy = 70
+    }
+     else if (jermastican >0 & jermastican < 20) {
+         energy = 60
+     }
+     else{
+        energy = 50
+     }
         var fullCells = this.chooseCell(2);
             var newCell = random(fullCells);
-            if (newCell && this.energy>=70) {
+            if (newCell && this.energy>energy) {
                 var newX = newCell[0];
                 var newY = newCell[1];
                 matrix[this.y][this.x] = 0

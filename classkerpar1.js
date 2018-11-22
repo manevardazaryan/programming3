@@ -93,12 +93,14 @@ class Kerpar1 extends Base{
             [this.x, this.y + 6]
 
         ];
-    }
+        }
+
     
-    chooseCell(character) {
+    chooseCell(character){
         this.getNewCoordinates()
         return super.chooseCell(character);
     }
+
     move() {
         return super.move()
     }
