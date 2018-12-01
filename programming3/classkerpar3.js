@@ -2,11 +2,11 @@ class Kerpar3 extends Base {
     constructor(x, y, index) {
         super(x, y, index);
         this.energy = 0;
-        this.power = 25;
+        this.power = 70;
         this.directions = []
         for (var y = 0; y < matrix.length; y++) {
             for (var x = 0; x < matrix[y].length; x++) {
-                if ((x - 25) * (x - 25) + (y - 25) * (y - 25) >= 20 * 25) {
+                if ((x - 12) * (x - 12) + (y - 12) * (y - 12) >= 10 * 10) {
                     this.directions.push([x, y])
                 }
             }
@@ -14,7 +14,7 @@ class Kerpar3 extends Base {
         this.directions1 = []
         for (var y = 0; y < matrix.length; y++) {
             for (var x = 0; x < matrix[y].length; x++) {
-                if ((x - 25) * (x - 25) + (y - 25) * (y - 25) <= 20 * 25) {
+                if ((x - 12) * (x - 12) + (y - 12) * (y - 12) <= 10 * 10) {
                     this.directions1.push([x, y])
                 }
             }
@@ -43,8 +43,19 @@ class Kerpar3 extends Base {
         return super.move();
     }
     exchange() {
+        if (jermastican >= -30 & jermastican <= 0) {
+            var fullCells = this.chooseCell1(2);
+        }
+        else if (jermastican >= 1 & jermastican <= 20) {
+            var fullCells = this.chooseCell1(3);
+        }
+        else if (jermastican >= 36 & jermastican <= 50) {
+            var fullCells = this.chooseCell1(1);
+        }
+        else if (jermastican >= 21 & jermastican <= 35) {
+            var fullCells = this.chooseCell1(4);
+        }
         this.energy++
-        var fullCells = this.chooseCell1(2);
         var newCell = random(fullCells);
         if (newCell && this.energy >= 35) {
             var newX = newCell[0];
@@ -64,6 +75,21 @@ class Kerpar3 extends Base {
             this.move()
         }
     }
+    event() {
+        for (var y = 0; y < matrix.length; y++) {
+            for (var x = 0; x < matrix[y].length; x++) {
+                if (y <= x && x > m + 1 - y || y >= x && x < m + 1 - y) {
+                    matrix[y][x] = 0;
+                    for (var i in kerpar3arr) {
+                        if (x == kerpar3arr[i].x && y == kerpar3arr[i].y) {
+                            kerpar3arr.splice(i, 1);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
     death() {
         this.power--
         if (this.power < 0) {
@@ -76,5 +102,7 @@ class Kerpar3 extends Base {
             }
 
         }
+
+        statistics.kerpar3death++;
     }
 }

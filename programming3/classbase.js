@@ -30,6 +30,21 @@ class Base {
         }
         return found;
     }
+    evtchooseCell(character) {
+        var found = [];
+        for (var i in this.evtdirections) {
+            var x = this.evtdirections[i][0];
+            var y = this.evtdirections[i][1];
+            if (x >= 0 && x < matrix[0].length && y >= 0 && y < matrix.length) {
+
+
+                if (matrix[y][x] == character) {
+                    found.push(this.evtdirections[i]);
+                }
+            }
+        }
+        return found;
+    }
         move() {
         var fullCells = this.chooseCell(0);
         var newCell1 = random(fullCells);

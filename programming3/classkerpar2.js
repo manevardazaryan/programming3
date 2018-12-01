@@ -1,8 +1,9 @@
-class Kerpar2 extends Base{
-    constructor(x, y, index,multiply) {
-        super(x,y,index,multiply);
-        this.power = 40
-        this.energy = 0
+class Kerpar2 extends Base {
+    constructor(x, y, index, multiply) {
+        super(x, y, index, multiply);
+        this.power = 50;
+        this.energy = 0;
+        this.ser = Math.round(Math.random() * (3 - 2) + 2);
     }
 
     getNewCoordinates() {
@@ -135,7 +136,7 @@ class Kerpar2 extends Base{
     disappear() {
         var emptyCells = this.chooseCell(4);
         var newCell = random(emptyCells)
-        if (newCell && this.energy>=55) {
+        if (newCell && this.energy >= 30) {
             var newX = newCell[0];
             var newY = newCell[1];
             matrix[newY][newX] = 0;
@@ -159,7 +160,7 @@ class Kerpar2 extends Base{
         this.energy++
         var fullCells = this.chooseCell(3);
         var newCell = random(fullCells);
-        if (newCell && this.energy>=60) {
+        if (newCell && this.energy >= 60) {
             var newX = newCell[0];
             var newY = newCell[1];
             matrix[this.y][this.x] = 0
@@ -179,56 +180,90 @@ class Kerpar2 extends Base{
         else {
             this.mul()
         }
+        statistics.kerpar2exchange++;
     }
     mul() {
 
-       if (jermastican >35 & jermastican < 50) {
-          var  multiply = 35
-      }
-       else if (jermastican >20 & jermastican < 35) {
-          multiply = 30
-       }
-        this.multiply++
-        var emptyCells = this.chooseCell(0);
-        var newCell = random(emptyCells)
-        if (newCell && this.multiply >= multiply) {
+        if (jermastican >= 36 & jermastican <= 50) {
+            var multiply = 35
+        }
+        else if (jermastican >= 21 & jermastican <= 35) {
+            multiply = 30
+        }
+        else {
+            multiply = 25
+        }
+        if (this.ser == 2) {
+            var emptyCells1 = this.chooseCell(5);
+            var newCell1 = random(emptyCells1)
+            if (newCell1) {
+                var newX1 = newCell1[0];
+                var newY1 = newCell1[1];
+            }
+            for (var i in kerpar2arr) {
+                if (kerpar2arr[i].x == newX1 && kerpar2arr[i].y == newY1 && kerpar2arr[i].ser == 3) {
+                    this.multiply++
+                    var emptyCells = this.chooseCell(0);
+                    var newCell = random(emptyCells)
+                    if (newCell && this.multiply >= multiply) {
+                        var newX = newCell[0];
+                        var newY = newCell[1];
+                        matrix[newY][newX] = this.index;
+                        var newkerpar = new Kerpar2(newX, newY, this.index);
+                        kerpar2arr.push(newkerpar);
+                    }
+                    else {
+                        this.eat()
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+
+    eat() {
+        if (jermastican >= -30 & jermastican <= 0) {
+
+            var energy = 35
+        }
+        else if (jermastican >= 1 & jermastican <= 20) {
+            energy = 30
+        }
+        else {
+            energy = 25
+        }
+        var fullCells = this.chooseCell(2);
+        var newCell = random(fullCells);
+        if (newCell && this.energy > energy) {
             var newX = newCell[0];
             var newY = newCell[1];
+            matrix[this.y][this.x] = 0
             matrix[newY][newX] = this.index;
-            var newkerpar = new Kerpar2(newX, newY, this.index);
-            kerpar2arr.push(newkerpar);
-        }
-        else{
-            this.eat()
+            this.x = newX
+            this.y = newY
+            for (var i in grasseaterarr) {
+                if (newX == grasseaterarr[i].x && newY == grasseaterarr[i].y) {
+                    grasseaterarr.splice(i, 1);
+                    break;
+                }
+            }
         }
     }
-    eat(){
-    if (jermastican > -30 & jermastican < 0) {
-
-         var energy = 70
-    }
-     else if (jermastican >0 & jermastican < 20) {
-         energy = 60
-     }
-     else{
-        energy = 50
-     }
-        var fullCells = this.chooseCell(2);
-            var newCell = random(fullCells);
-            if (newCell && this.energy>energy) {
-                var newX = newCell[0];
-                var newY = newCell[1];
-                matrix[this.y][this.x] = 0
-                matrix[newY][newX] = this.index;
-                this.x = newX
-                this.y = newY
-                for (var i in grasseaterarr) {
-                    if (newX == grasseaterarr[i].x && newY == grasseaterarr[i].y) {
-                        grasseaterarr.splice(i, 1);
-                        break;
+    event() {
+        for (var y = 0; y < matrix.length; y++) {
+            for (var x = 0; x < matrix[y].length; x++) {
+                if (y <= x && x > m + 1 - y || y >= x && x < m + 1 - y) {
+                    matrix[y][x] = 0;
+                    for (var i in kerpar2arr) {
+                        if (x == kerpar2arr[i].x && y == kerpar2arr[i].y) {
+                            kerpar2arr.splice(i, 1);
+                            break;
+                        }
                     }
                 }
             }
+        }
     }
 
     death() {
@@ -243,7 +278,7 @@ class Kerpar2 extends Base{
             }
 
         }
-        else{
+        else {
             this.exchange()
             this.disappear()
         }

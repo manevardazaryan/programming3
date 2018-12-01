@@ -1,6 +1,6 @@
 class GrassEater extends Base {
     constructor(x, y, index) {
-        super(x,y,index);
+        super(x, y, index);
     }
     getNewCoordinates() {
         this.directions = [
@@ -21,6 +21,7 @@ class GrassEater extends Base {
     }
     move() {
         return super.move()
+        statistics.grasseatermove++;
     }
     eat() {
         var fullCells = this.chooseCell(1);
@@ -39,6 +40,22 @@ class GrassEater extends Base {
                 }
             }
         }
-        else (this.move())
+        else { this.move() }
+    }
+
+    event() {
+        for (var y = 0; y < matrix.length; y++) {
+            for (var x = 0; x < matrix[y].length; x++) {
+                if (y <= x && x > m + 1 - y || y >= x && x < m + 1 - y) {
+                    matrix[y][x] = 0;
+                    for (var i in grasseaterarr) {
+                        if (x == grasseaterarr[i].x && y == grasseaterarr[i].y) {
+                            grasseaterarr.splice(i, 1);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
